@@ -7,7 +7,7 @@ const passport = require('./config/passport')
 const methodOverride = require('method-override')
 const app = express()
 const db = require('./models')
-const port = 3001
+const port = process.env.PORT || 3000
 
 //設定伺服器
 app.listen(port, () => {
