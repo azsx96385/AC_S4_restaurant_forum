@@ -57,6 +57,9 @@ module.exports = (app, passport) => {
   app.put('/admin/restaurants/:id', authenticatedAdmin, upload.single('image'), adminController.putRestaurant)
   //管理者刪除單筆資料
   app.delete('/admin/restaurants/:id', authenticatedAdmin, adminController.deleteRestaurant)
-
-
+  //[使用者管理介面]-----------------------------------------
+  app.get('/admin/users', authenticatedAdmin, adminController.editUser)
+  app.put('/admin/users/:id', authenticatedAdmin, adminController.putUser)
+  app.get('/admin/users/:id/user', authenticatedAdmin, adminController.putIsUser)
+  app.get('/admin/users/:id/admin', authenticatedAdmin, adminController.putIsAdmin)
 }

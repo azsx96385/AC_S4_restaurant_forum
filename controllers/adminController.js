@@ -2,6 +2,7 @@
 const fs = require('fs')
 const db = require('../models')
 const Restaurant = db.Restaurant
+const User = db.User
 
 const adminController = {
   getRestaurants: (req, res) => {
@@ -115,6 +116,60 @@ const adminController = {
         res.redirect('/admin/restaurants')
       })
     })
+  },
+  editUser: (req, res) => {
+    return User.findAll().then(users => {
+      return res.render('admin/users', { users })
+    })
+  },
+  putUser: (req, res) => {
+    //取得id
+    const userid = req.params.id
+    //取得資料-更新儲存
+    User.findByPk(userid).then(userdata => {
+      let { name, email, password, isAdmin } = userdata
+      if (isAdmin) {
+        userdata.update({ name, email, password, isAdmin: false }).then(userdata => {
+          req.flash('success_messages', `成功訊息｜已將${name}身份改為User`)
+          return res.redirect('/admin/users')
+        })
+      } else {
+        userdata.update({ name, email, password, isAdmin: true }).then(userdata => {
+          req.flash('success_messages', `成功訊息｜已將${name}身份改為Admin `)
+          return res.redirect('/admin/users')
+        })
+
+      }
+
+    })
+
+  }
+  ,
+  putIsAdmin: (req, res) => {
+    //取得id
+    const userid = req.params.id
+    //取得資料-更新儲存
+    User.findByPk(userid).then(userdata => {
+      let { name, email, password, isAdmin } = userdata
+      userdata.update({ name, email, password, isAdmin: true }).then(userdata => {
+        req.flash('success_messages', `成功訊息｜已將${name}身份改為Admin`)
+        return res.redirect('/admin/users')
+      })
+    })
+
+  },
+  putIsUser: (req, res) => {
+    //取得id
+    const userid = req.params.id
+    //取得資料-更新儲存
+    User.findByPk(userid).then(userdata => {
+      let { name, email, password, isAdmin } = userdata
+      userdata.update({ name, email, password, isAdmin: false }).then(userdata => {
+        req.flash('success_messages', `成功訊息｜已將${name}身份改為User`)
+        return res.redirect('/admin/users')
+      })
+    })
+
   }
 
 }
