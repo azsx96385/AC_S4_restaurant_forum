@@ -7,7 +7,12 @@ const passport = require('./config/passport')
 const methodOverride = require('method-override')
 const app = express()
 const db = require('./models')
+const dotenv = require('dotenv')
 const port = process.env.PORT || 3000
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 
 //設定伺服器
 app.listen(port, () => {

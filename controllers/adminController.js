@@ -3,6 +3,8 @@ const fs = require('fs')
 const db = require('../models')
 const Restaurant = db.Restaurant
 const User = db.User
+const imgur = require('imgur-node-api')
+const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
 const adminController = {
   getRestaurants: (req, res) => {
@@ -25,17 +27,17 @@ const adminController = {
     let { file } = req
     if (file) {
       //讀出圖片檔 ｜因為upload.single('image') ｜中介層關係｜資料暫存在 /tem
-      fs.readFile(file.path, (err, data) => {
+      imgur.setClientID(IMGUR_CLIENT_ID);
+      imgur.upload(file.path, (err, img) => {
         if (err) console.log(err)
-        fs.writeFile(`upload/${file.originalname}`, data, () => {
-          return Restaurant.create({
-            name, tel, address, opening_hours, description,
-            image: file ? `/upload/${file.originalname}` : null
-          }).then(restaurant => {
-            req.flash('success_messages', '成功訊息｜成功新增一筆餐廳資料')
-            return res.redirect('/admin/restaurants')
-          })
+        return Restaurant.create({
+          name, tel, address, opening_hours, description,
+          image: file ? img.data.link : restaurant.image,
+        }).then(restaurant => {
+          req.flash('success_messages', '成功訊息｜成功新增一筆餐廳資料')
+          return res.redirect('/admin/restaurants')
         })
+
       })
     } else {
       //生成資料物件，存入資料庫
@@ -77,19 +79,19 @@ const adminController = {
     //驗證上傳資料 ｜ 有無包含圖片檔案
     const { file } = req
     if (file) {
-      fs.readFile(file.path, (err, data) => {
+      imgur.setClientID(IMGUR_CLIENT_ID);
+      imgur.upload(file.path, (err, img) => {
         if (err) console.log(err)
-        fs.writeFile(`upload/${file.originalname}`, data, () => {
-          return Restaurant.findByPk(resId).then(restaurant => {
-            restaurant.update({
-              name, tel, address, opening_hours, description,
-              image: file ? `/upload/${file.originalname}` : null
-            }).then(restaurant => {
-              req.flash('success_messages', '成功訊息｜餐廳資料已經成功更新')
-              res.redirect('/admin/restaurants')
-            })
+        return Restaurant.findByPk(resId).then(restaurant => {
+          restaurant.update({
+            name, tel, address, opening_hours, description,
+            image: file ? img.data.link : restaurant.image,
+          }).then(restaurant => {
+            req.flash('success_messages', '成功訊息｜餐廳資料已經成功更新')
+            res.redirect('/admin/restaurants')
           })
         })
+
       })
     } else {
       return Restaurant.findByPk(resId).then((restaurant) => {
