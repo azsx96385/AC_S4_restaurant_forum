@@ -223,6 +223,51 @@ const adminController = {
           return res.redirect("/admin/users");
         });
     });
+  },
+  getCategories: (req, res) => {
+    let id = req.params.id;
+
+    Category.findAll().then(categories => {
+      if (id) {
+        Category.findByPk(id).then(category => {
+          res.render("admin/categories", { categories, category });
+        });
+      } else {
+        res.render("admin/categories", { categories });
+      }
+    });
+  },
+  postCategory: (req, res) => {
+    let { name } = req.body;
+    if (name) {
+      Category.create({ name }).then(category => {
+        req.flash("success_messages", "成功訊息|你已經成功新增一筆新分類");
+        return res.redirect("/admin/categories");
+      });
+    }
+  },
+  putCategory: (req, res) => {
+    let { name } = req.body;
+    let id = req.params.id;
+    if (name) {
+      Category.findByPk(id).then(category => {
+        category.update({ name }).then(category => {
+          req.flash("success_messages", "成功訊息|你已經成功更新一筆新分類");
+          return res.redirect("/admin/categories");
+        });
+      });
+    }
+  },
+  deleteCategory: (req, res) => {
+    let id = req.params.id;
+    if (id) {
+      Category.findByPk(id).then(category => {
+        category.destroy().then(category => {
+          req.flash("success_messages", "成功訊息|你已經成功刪除一筆新分類");
+          return res.redirect("/admin/categories");
+        });
+      });
+    }
   }
 };
 module.exports = adminController;
