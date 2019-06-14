@@ -15,11 +15,20 @@ const adminController = {
     });
   },
   createRestaurant: (req, res) => {
-    return res.render("admin/create");
+    Category.findAll().then(categories => {
+      return res.render("admin/create", { categories });
+    });
   },
   postRestaura: (req, res) => {
     //驗證資料漏填
-    let { name, tel, address, opening_hours, description } = req.body;
+    let {
+      name,
+      tel,
+      address,
+      opening_hours,
+      description,
+      categoryId
+    } = req.body;
     if (!name && !tel && !address && !opening_hours && !description) {
       req.flash("error_messages", "錯誤訊息｜資料漏填");
       //return res.redirect('/admin/restaurants/create')
@@ -38,7 +47,8 @@ const adminController = {
           address,
           opening_hours,
           description,
-          image: file ? img.data.link : restaurant.image
+          image: file ? img.data.link : restaurant.image,
+          CategoryId: categoryId
         }).then(restaurant => {
           req.flash("success_messages", "成功訊息｜成功新增一筆餐廳資料");
           return res.redirect("/admin/restaurants");
@@ -52,7 +62,8 @@ const adminController = {
         address,
         opening_hours,
         description,
-        image: null
+        image: null,
+        CategoryId: categoryId
       }).then(resData => {
         req.flash("success_messages", "成功訊息｜成功新增一筆餐廳資料");
         return res.redirect("/admin/restaurants");
@@ -63,21 +74,38 @@ const adminController = {
     //取得餐廳資料 id
     let resId = req.params.id;
     //使用model 調用資料
-    Restaurant.findByPk(resId).then(restaurant => {
+    //使用ORM 關聯語法-簡潔
+    Restaurant.findByPk(resId, { include: [Category] }).then(restaurant => {
       return res.render("admin/restaurant", { restaurant });
     });
+
+    //只用FK找－冗長
+    // Restaurant.findByPk(resId).then(restaurant => {
+    //   Category.findByPk(restaurant.CategoryId).then(category => {
+    //     return res.render("admin/restaurant", { restaurant, category });
+    //   });
+    // });
   },
   editRestaurant: (req, res) => {
     //取得餐廳資料 id
     let resId = req.params.id;
     //使用model 調用資料
-    Restaurant.findByPk(resId).then(restaurant => {
-      return res.render("admin/create", { restaurant });
+    Restaurant.findByPk(resId, { include: [Category] }).then(restaurant => {
+      Category.findAll().then(categories => {
+        return res.render("admin/create", { restaurant, categories });
+      });
     });
   },
   putRestaurant: (req, res) => {
     //驗證資料漏填
-    let { name, tel, address, opening_hours, description } = req.body;
+    let {
+      name,
+      tel,
+      address,
+      opening_hours,
+      description,
+      categoryId
+    } = req.body;
     //調出資料，做更新
     let resId = req.params.id; //取得餐廳資料 id
     if (!name && !tel && !address && !opening_hours && !description) {
@@ -98,7 +126,8 @@ const adminController = {
               address,
               opening_hours,
               description,
-              image: file ? img.data.link : restaurant.image
+              image: file ? img.data.link : restaurant.image,
+              CategoryId: categoryId
             })
             .then(restaurant => {
               req.flash("success_messages", "成功訊息｜餐廳資料已經成功更新");
@@ -115,7 +144,8 @@ const adminController = {
             address,
             opening_hours,
             description,
-            image: restaurant.image
+            image: restaurant.image,
+            CategoryId: categoryId
           })
           .then(restaurant => {
             req.flash("success_messages", "成功訊息｜餐廳資料已經成功更新");
