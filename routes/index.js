@@ -2,6 +2,7 @@
 let resController = require("../controllers/restController");
 let adminController = require("../controllers/adminController");
 let userController = require("../controllers/userController");
+let commentController = require("../controllers/commentController");
 
 //上傳圖片用
 const multer = require("multer");
@@ -34,6 +35,9 @@ module.exports = (app, passport) => {
   // 使用者 到達 /restaurant , 呼叫controller 的 getRestaurants 處理後續動作
   app.get("/restaurants", authenticate, resController.getRestaurants);
   app.get("/restaurants/:id", authenticate, resController.getRestaurant);
+
+  //[使用者評論]=====================================================
+  app.post("/comments", authenticate, commentController.postComment);
 
   //[使用者註冊]-----------
   app.get("/signup", userController.signUpPage);
