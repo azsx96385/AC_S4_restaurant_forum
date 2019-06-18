@@ -11,7 +11,7 @@
 //         return options.inverse(this);
 //     }
 // })
-
+const moment = require("moment");
 module.exports = {
   //Handlebars.registerHelper("ifCond", function(a, b, options) {
   ifCond: function(a, b, options) {
@@ -20,5 +20,8 @@ module.exports = {
     } else {
       return options.inverse(this);
     }
+  },
+  moment: function(a) {
+    return moment(a).fromNow();
   }
 };

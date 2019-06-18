@@ -2,6 +2,8 @@
 const db = require("../models");
 const Restaurant = db.Restaurant;
 const Category = db.Category;
+const Comment = db.Comment;
+const User = db.User;
 
 const restController = {
   getRestaurants: (req, res) => {
@@ -58,7 +60,10 @@ const restController = {
   },
   getRestaurant: (req, res) => {
     let id = req.params.id;
-    Restaurant.findByPk(id, { include: Category }).then(restaurant => {
+
+    Restaurant.findByPk(id, {
+      include: [Category, { model: Comment, include: [User] }]
+    }).then(restaurant => {
       return res.render("restaurant", { restaurant });
     });
   }
