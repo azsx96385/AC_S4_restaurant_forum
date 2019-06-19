@@ -2,6 +2,8 @@
 const bcrypt = require("bcrypt-nodejs");
 const db = require("../models");
 const User = db.User;
+const Comment = db.Comment;
+const Restaurant = db.Restaurant;
 const imgur = require("imgur-node-api");
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID;
 const multer = require("multer");
@@ -54,8 +56,23 @@ const userController = {
   },
   getUser: (req, res) => {
     let userId = req.params.id;
-    User.findByPk(userId).then(user => {
-      res.render("userprofile", { user });
+    User.findByPk(userId, { include: Comment }).then(user => {
+      let resIdListAll = [];
+      let restaurants = [];
+      user.Comments.forEach(comment => {
+        resIdListAll.push(comment.RestaurantId);
+      });
+      let resIdListNoreapt = resIdListAll.filter(function(element, index, arr) {
+        return arr.indexOf(element) === index;
+      });
+      resIdListNoreapt.forEach(resId => {
+        Restaurant.findByPk(resId).then(resdata => {
+          console.log("-------------------", resdata);
+          restaurants.push(resdata);
+        });
+      });
+
+      res.render("userprofile", { user, restaurants });
     });
   },
   editUser: (req, res) => {

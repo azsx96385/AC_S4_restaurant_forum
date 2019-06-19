@@ -8,3 +8,16 @@
         {{/ifCond}}
     </div>
 </div>
+<div class="row mt-3">
+    <div class="col">
+        <div class="card">
+            <h5 class="card-header">已評論餐廳</h5>
+            <div class="card-body">
+                {{#each restaurants}}
+                <a href="/restaurants/{{this.id}}"> <img src="{{this.image}}" alt="餐廳圖片{{this.id}}"
+                        style="height:60px;weight:60px;"> </a>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</div>
