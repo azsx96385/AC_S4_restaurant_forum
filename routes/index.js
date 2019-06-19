@@ -38,6 +38,11 @@ module.exports = (app, passport) => {
 
   //[使用者評論]=====================================================
   app.post("/comments", authenticate, commentController.postComment);
+  app.delete(
+    "/comments/:id",
+    authenticatedAdmin,
+    commentController.deleteComment
+  );
 
   //[使用者註冊]-----------
   app.get("/signup", userController.signUpPage);

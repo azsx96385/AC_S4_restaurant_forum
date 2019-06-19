@@ -12,6 +12,15 @@ const commentController = {
     }).then(comment => {
       res.redirect(`/restaurants/${req.body.restaurantId}`);
     });
+  },
+  deleteComment: (req, res) => {
+    let commentId = req.params.id;
+    Comment.findByPk(commentId).then(comment => {
+      comment.destroy().then(data => {
+        req.flash("success_Messages", "評論已刪除");
+        res.redirect(`/restaurants/${comment.RestaurantId}`);
+      });
+    });
   }
 };
 
