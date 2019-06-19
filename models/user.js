@@ -6,7 +6,8 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
-      isAdmin: DataTypes.BOOLEAN //身份驗證時-補充
+      isAdmin: DataTypes.BOOLEAN, //身份驗證時-補充
+      image: DataTypes.STRING
     },
     {}
   );

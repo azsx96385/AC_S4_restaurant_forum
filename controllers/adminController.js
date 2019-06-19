@@ -165,12 +165,12 @@ const adminController = {
       });
     });
   },
-  editUser: (req, res) => {
+  getUsers: (req, res) => {
     return User.findAll().then(users => {
       return res.render("admin/users", { users });
     });
   },
-  putUser: (req, res) => {
+  putUsers: (req, res) => {
     //取得id
     const userid = req.params.id;
     //取得資料-更新儲存

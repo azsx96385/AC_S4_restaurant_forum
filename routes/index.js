@@ -60,6 +60,17 @@ module.exports = (app, passport) => {
   //[使用者登出]-----------
   app.get("/logout", userController.logout);
   //======================================================================================
+  //[User profile]-----------------------------------------
+  app.get("/users/:id", authenticate, userController.getUser);
+  app.get("/users/:id/edit", authenticate, userController.editUser);
+  app.put(
+    "/users/:id",
+    authenticate,
+    upload.single("image"),
+    userController.putUser
+  );
+
+  //======================================================================================
   //[餐廳的ＣＲＵＤ]-----------------------------------------
   //管理者檢視所有餐廳
   app.get("/admin", authenticatedAdmin, (req, res) => {
@@ -107,8 +118,8 @@ module.exports = (app, passport) => {
     adminController.deleteRestaurant
   );
   //[使用者管理介面]-----------------------------------------
-  app.get("/admin/users", authenticatedAdmin, adminController.editUser);
-  app.put("/admin/users/:id", authenticatedAdmin, adminController.putUser);
+  app.get("/admin/users", authenticatedAdmin, adminController.getUsers);
+  app.put("/admin/users/:id", authenticatedAdmin, adminController.putUsers);
 
   //======================================================================================
   //[Category的ＣＲＵＤ]-----------------------------------------

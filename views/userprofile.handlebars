@@ -1,0 +1,10 @@
+<div class="row">
+    <div class="col-3"><img src="{{user.image}}" alt="" style="height: 100px;weight:100px;"></div>
+    <div class="col-9">
+        <h5>{{user.name}}</h5>
+        <p>{{user.email}}</p>
+        {{#ifCond req.user.id req.params.id}}
+        <a class="btn btn-primary" href="/users/{{user.id}}/edit">Edit</a>
+        {{/ifCond}}
+    </div>
+</div>
