@@ -34,24 +34,8 @@ module.exports = {
       ],
       {}
     );
-    queryInterface.bulkInsert(
-      "Restaurants",
-      Array.from({ length: 50 }).map(d => ({
-        name: faker.name.findName(),
-        tel: faker.phone.phoneNumber(),
-        address: faker.address.streetAddress(),
-        opening_hours: "08:00",
-        image: faker.image.imageUrl(),
-        description: faker.lorem.text(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        CategoryId: Math.floor(Math.random() * 5) + 1, // 加上這行
-        viewCounts: 0
-      })),
-      {}
-    );
 
-    return queryInterface.bulkInsert(
+    queryInterface.bulkInsert(
       "Categories",
       [
         "中式料理",
@@ -66,6 +50,23 @@ module.exports = {
         name: item,
         createdAt: new Date(),
         updatedAt: new Date()
+      })),
+      {}
+    );
+
+    return queryInterface.bulkInsert(
+      "Restaurants",
+      Array.from({ length: 50 }).map(d => ({
+        name: faker.name.findName(),
+        tel: faker.phone.phoneNumber(),
+        address: faker.address.streetAddress(),
+        opening_hours: "08:00",
+        image: faker.image.imageUrl(),
+        description: faker.lorem.text(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        CategoryId: Math.floor(Math.random() * 5) + 1, // 加上這行
+        viewCounts: 0
       })),
       {}
     );
