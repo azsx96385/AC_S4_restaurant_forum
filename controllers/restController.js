@@ -64,7 +64,11 @@ const restController = {
     Restaurant.findByPk(id, {
       include: [Category, { model: Comment, include: [User] }]
     }).then(restaurant => {
-      return res.render("restaurant", { restaurant });
+      //瀏覽次數邏輯-將點閱數+1後再送出
+      restaurant.viewCounts += 1;
+      restaurant.save({ fields: ["viewCounts"] }).then(restaurant => {
+        return res.render("restaurant", { restaurant });
+      });
     });
   },
   getFeeds: (req, res) => {
@@ -90,8 +94,9 @@ const restController = {
     return Restaurant.findByPk(req.params.id, {
       include: [Comment, Category]
     }).then(restaurant => {
-      console.log(restaurant);
-      res.render("dashboard", { restaurant });
+      restaurant.save({ fields: ["viewCounts"] }).then(restaurant => {
+        res.render("dashboard", { restaurant });
+      });
     });
   }
 };
