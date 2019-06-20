@@ -36,6 +36,11 @@ module.exports = (app, passport) => {
   app.get("/restaurants", authenticate, resController.getRestaurants);
   app.get("/restaurants/feeds", authenticate, resController.getFeeds);
   app.get("/restaurants/:id", authenticate, resController.getRestaurant);
+  app.get(
+    "/restaurants/:id/dashboard",
+    authenticate,
+    resController.getDashboard
+  );
 
   //[使用者評論]=====================================================
   app.post("/comments", authenticate, commentController.postComment);

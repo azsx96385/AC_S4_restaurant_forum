@@ -84,6 +84,15 @@ const restController = {
         return res.render("feeds", { restaurants, comments });
       });
     });
+  },
+  getDashboard: (req, res) => {
+    //目標: 調出單一餐廳的所有評論| 餐廳對評論-1對多
+    return Restaurant.findByPk(req.params.id, {
+      include: [Comment, Category]
+    }).then(restaurant => {
+      console.log(restaurant);
+      res.render("dashboard", { restaurant });
+    });
   }
 };
 
