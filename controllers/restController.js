@@ -66,6 +66,24 @@ const restController = {
     }).then(restaurant => {
       return res.render("restaurant", { restaurant });
     });
+  },
+  getFeeds: (req, res) => {
+    //目標: 取回跟ccategory 關聯的 res 資料
+    //目標: 取回跟res ， user 關聯的 comment 資料
+    return Restaurant.findAll({
+      limit: 10,
+      order: [["createdAt", "DESC"]],
+      include: [Category]
+    }).then(restaurants => {
+      //取到最新新增的res 資料
+      Comment.findAll({
+        limit: 10,
+        include: [Restaurant, User],
+        order: [["createdAt", "DESC"]]
+      }).then(comments => {
+        return res.render("feeds", { restaurants, comments });
+      });
+    });
   }
 };
 
