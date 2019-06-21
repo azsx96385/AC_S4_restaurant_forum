@@ -44,7 +44,9 @@ passport.deserializeUser((id, cb) => {
   User.findByPk(id, {
     include: [
       { model: db.Restaurant, as: "FavoritedRestaurants" },
-      { model: db.Restaurant, as: "LikedRestaurants" }
+      { model: db.Restaurant, as: "LikedRestaurants" },
+      { model: db.User, as: "Followings" }, //為了調出，使用者，追蹤了那些人
+      { model: db.User, as: "Followers" } //為了調出，使用者，被那些人追蹤
     ]
   }).then(user => {
     //如果要從記憶體，取出user data，使用id到資料庫調用資料

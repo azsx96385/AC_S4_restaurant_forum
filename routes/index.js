@@ -34,12 +34,20 @@ module.exports = (app, passport) => {
   });
   // 使用者 到達 /restaurant , 呼叫controller 的 getRestaurants 處理後續動作
   app.get("/restaurants", authenticate, resController.getRestaurants);
+  app.get("/restaurants/top", authenticate, userController.getTopUser);
   app.get("/restaurants/feeds", authenticate, resController.getFeeds);
   app.get("/restaurants/:id", authenticate, resController.getRestaurant);
   app.get(
     "/restaurants/:id/dashboard",
     authenticate,
     resController.getDashboard
+  );
+  //[使用者|追蹤功能]=====================================================
+  app.post("/following/:userId", authenticate, userController.addFollowing);
+  app.delete(
+    "/following/:userId",
+    authenticate,
+    userController.removeFollowing
   );
   //[使用者|加入移除最愛]=====================================================
 
