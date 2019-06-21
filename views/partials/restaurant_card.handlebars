@@ -12,11 +12,18 @@
                     <span class="badge badge-secondary">{{this.Category.name}}</span>
                     <p class=" card-text">{{this.description}}</p>
                     {{#if isFavorited}}
-                    <form action="/favorite/{{this.id}}?_method=DELETE" method="POST"><button type="submit"
-                            class="btn btn-danger">移除最愛</button></form>
+                    <form class="d-inline-block" action="/favorite/{{this.id}}?_method=DELETE" method="POST"><button
+                            type="submit" class="btn btn-danger">移除最愛</button></form>
                     {{else}}
-                    <form action="/favorite/{{this.id}}" method="POST"><button type="submit"
+                    <form class="d-inline-block" action="/favorite/{{this.id}}" method="POST"><button type="submit"
                             class="btn btn-primary">加到最愛</button></form>
+                    {{/if}}
+                    {{#if markedLike}}
+                    <form class="d-inline-block" action="/like/{{this.id}}?_method=DELETE" method="POST"><button
+                            type="submit" class="btn btn-danger">UnLike</button></form>
+                    {{else}}
+                    <form class="d-inline-block" action="/like/{{this.id}}" method="POST"><button type="submit"
+                            class="btn btn-primary">Like</button></form>
                     {{/if}}
                 </div>
             </div>

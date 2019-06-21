@@ -42,7 +42,10 @@ passport.serializeUser((user, cb) => {
 });
 passport.deserializeUser((id, cb) => {
   User.findByPk(id, {
-    include: [{ model: db.Restaurant, as: "FavoritedRestaurants" }]
+    include: [
+      { model: db.Restaurant, as: "FavoritedRestaurants" },
+      { model: db.Restaurant, as: "LikedRestaurants" }
+    ]
   }).then(user => {
     //如果要從記憶體，取出user data，使用id到資料庫調用資料
     return cb(null, user);

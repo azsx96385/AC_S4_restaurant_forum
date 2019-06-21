@@ -37,9 +37,7 @@ const restController = {
       );
       let prev = page - 1 < 1 ? page : page - 1; //上頁頁碼| 公式本頁-1 如果小於1 則預設1
       let next = page + 1 > pages ? pages : page + 1; // 下頁頁碼| 公式 本頁+1 如果大於總頁數 則預設最後一頁
-      console.log("------------------", results); //result 是 該類別該頁的餐廳資料
-      console.log("XXXXXXXXXXXXXXXXXX", results.rows[0]);
-
+      console.log(results); //result 是 該類別該頁的餐廳資料
       const data = results.rows.map(data => ({
         ...data.dataValues, //展開運算子
         //編輯原本-description資料
@@ -47,7 +45,9 @@ const restController = {
         //新加入一屬性
         isFavorited: req.user.FavoritedRestaurants.map(d => d.id).includes(
           data.id
-        )
+        ),
+        //加入 like 屬性
+        markedLike: req.user.LikedRestaurants.map(d => d.id).includes(data.id)
       }));
       //生成類別nav
       Category.findAll().then(categories => {
@@ -70,7 +70,8 @@ const restController = {
       include: [
         Category,
         { model: Comment, include: [User] },
-        { model: User, as: "FavoritedUsers" }
+        { model: User, as: "FavoritedUsers" },
+        { model: User, as: "LikedUsers" }
       ]
     }).then(restaurant => {
       //瀏覽次數邏輯-將點閱數+1後再送出
@@ -81,7 +82,14 @@ const restController = {
         let isFavorited = req.user.FavoritedRestaurants.map(d => d.id).includes(
           restaurant.id
         );
-        return res.render("restaurant", { restaurant, isFavorited });
+        let markedLike = req.user.LikedRestaurants.map(d => d.id).includes(
+          restaurant.id
+        );
+        return res.render("restaurant", {
+          restaurant,
+          isFavorited,
+          markedLike
+        });
       });
     });
   },

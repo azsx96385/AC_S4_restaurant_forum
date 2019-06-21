@@ -5,6 +5,7 @@ const User = db.User;
 const Comment = db.Comment;
 const Restaurant = db.Restaurant;
 const Favorite = db.Favorite;
+const Like = db.Like;
 const imgur = require("imgur-node-api");
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID;
 const multer = require("multer");
@@ -122,6 +123,22 @@ const userController = {
     let UserId = req.user.id;
     let RestaurantId = req.params.restaurantId;
     return Favorite.findOne({ where: { UserId, RestaurantId } }).then(data => {
+      data.destroy().then(data => {
+        return res.redirect("back");
+      });
+    });
+  },
+  markLike: (req, res) => {
+    let UserId = req.user.id;
+    let RestaurantId = req.params.restaurantId;
+    return Like.create({ UserId, RestaurantId }).then(data => {
+      res.redirect("back");
+    });
+  },
+  markUnlike: (req, res) => {
+    let UserId = req.user.id;
+    let RestaurantId = req.params.restaurantId;
+    return Like.findOne({ where: { UserId, RestaurantId } }).then(data => {
       data.destroy().then(data => {
         return res.redirect("back");
       });

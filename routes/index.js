@@ -49,6 +49,9 @@ module.exports = (app, passport) => {
     authenticate,
     userController.removeFavorite
   );
+  //[使用者|標記喜愛]=====================================================
+  app.post("/like/:restaurantId", authenticate, userController.markLike);
+  app.delete("/like/:restaurantId", authenticate, userController.markUnlike);
 
   //[使用者評論]=====================================================
   app.post("/comments", authenticate, commentController.postComment);
