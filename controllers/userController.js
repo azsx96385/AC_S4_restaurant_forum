@@ -4,6 +4,7 @@ const db = require("../models");
 const User = db.User;
 const Comment = db.Comment;
 const Restaurant = db.Restaurant;
+const Favorite = db.Favorite;
 const imgur = require("imgur-node-api");
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID;
 const multer = require("multer");
@@ -109,6 +110,22 @@ const userController = {
         });
       });
     }
+  },
+  addFavorite: (req, res) => {
+    let UserId = req.user.id;
+    let RestaurantId = req.params.restaurantId;
+    return Favorite.create({ UserId, RestaurantId }).then(data => {
+      res.redirect("back");
+    });
+  },
+  removeFavorite: (req, res) => {
+    let UserId = req.user.id;
+    let RestaurantId = req.params.restaurantId;
+    return Favorite.findOne({ where: { UserId, RestaurantId } }).then(data => {
+      data.destroy().then(data => {
+        return res.redirect("back");
+      });
+    });
   }
 };
 

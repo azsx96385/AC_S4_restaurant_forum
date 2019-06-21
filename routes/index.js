@@ -41,6 +41,14 @@ module.exports = (app, passport) => {
     authenticate,
     resController.getDashboard
   );
+  //[使用者|加入移除最愛]=====================================================
+
+  app.post("/favorite/:restaurantId", authenticate, userController.addFavorite);
+  app.delete(
+    "/favorite/:restaurantId",
+    authenticate,
+    userController.removeFavorite
+  );
 
   //[使用者評論]=====================================================
   app.post("/comments", authenticate, commentController.postComment);
