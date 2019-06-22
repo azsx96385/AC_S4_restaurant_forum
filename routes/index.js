@@ -34,7 +34,7 @@ module.exports = (app, passport) => {
   });
   // 使用者 到達 /restaurant , 呼叫controller 的 getRestaurants 處理後續動作
   app.get("/restaurants", authenticate, resController.getRestaurants);
-  app.get("/restaurants/top", authenticate, userController.getTopUser);
+  app.get("/restaurants/top", authenticate, resController.getTopRestaurant);
   app.get("/restaurants/feeds", authenticate, resController.getFeeds);
   app.get("/restaurants/:id", authenticate, resController.getRestaurant);
   app.get(
@@ -86,6 +86,7 @@ module.exports = (app, passport) => {
   app.get("/logout", userController.logout);
   //======================================================================================
   //[User profile]-----------------------------------------
+  app.get("/users/top", authenticate, userController.getTopUser);
   app.get("/users/:id", authenticate, userController.getUser);
   app.get("/users/:id/edit", authenticate, userController.editUser);
   app.put(

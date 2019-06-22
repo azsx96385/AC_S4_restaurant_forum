@@ -120,6 +120,9 @@ const restController = {
         res.render("dashboard", { restaurant });
       });
     });
+  },
+  getTopRestaurant: (req, res) => {
+    res.render('topRestaurant')
   }
 };
 
