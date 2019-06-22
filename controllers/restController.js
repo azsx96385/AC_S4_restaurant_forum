@@ -94,7 +94,7 @@ const restController = {
     });
   },
   getFeeds: (req, res) => {
-    //目標: 取回跟ccategory 關聯的 res 資料
+    //目標: 取回跟category 關聯的 res 資料
     //目標: 取回跟res ， user 關聯的 comment 資料
     return Restaurant.findAll({
       limit: 10,
@@ -122,7 +122,28 @@ const restController = {
     });
   },
   getTopRestaurant: (req, res) => {
-    res.render('topRestaurant')
+    //撈出收藏數前10的餐廳資料
+    //1.撈餐廳資料（關聯Ｕser as FavoritedUsers 且新增屬性favoritecount-紀錄收藏數）
+    return Restaurant.findAll({ include: { model: User, as: 'FavoritedUsers' } }).then(restaurants => {
+      //得到所有餐廳資料
+
+      restaurants = restaurants.map(restaurant => ({
+        ...restaurant.dataValues,
+        description: restaurant.dataValues.description.substring(0, 50),
+        isFavorited: req.user.FavoritedRestaurants.map(d => d.id).includes(restaurant.id),
+        favoriteCount: restaurant.FavoritedUsers.length//新增屬性favoritecount-紀錄收藏數
+      }))
+      //2.sort desc 排列
+      restaurants = restaurants.sort((a, b) => b.favoriteCount - a.favoriteCount)
+
+      console.log([...restaurants])
+      //3.top10
+      let top10Restaurants = restaurants.slice(0, 10)
+
+      res.render('topRestaurant', { top10Restaurants })
+    })
+
+
   }
 };
 

@@ -1,23 +1,29 @@
 <div class="row">
     <div class="col-2"></div>
     <div class="col-8 ">
-        <div class="card" style="width: 100%;">
+        {{#each top10Restaurants}}
+        <div class="card mb-3" style="width: 100%;">
             <div class="row card-body">
                 <div class="col-4">
-                    <img src="" style="width:30%;hight:50%" alt="">
+                    <img src="{{this.image}}" style="width:100%;hight:100%" alt="">
                 </div>
                 <div class="col-8">
-                    <h5 class="card-title">Card title</h5>
-                    <span class="badge badge-secondary">追蹤人數：{{this.FollowerCount}}</span>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's
-                        content.</p>
+                    <h5 class="card-title">{{this.name}}</h5>
+                    <span class="badge badge-secondary">收藏人數：{{this.favoriteCount}}</span>
+                    <p class="card-text">{{this.description}}</p>
                     <a href="#" class="btn btn-primary d-inline-block">Show</a>
-                    <a href="#" class="btn btn-primary d-inline-block">加入最愛</a>
+                    {{#if this.isFavorited}}
+                    <form class="d-inline-block" action="/favorite/{{this.id}}?_method=DELETE" method="POST"><button
+                            type="submit" class="btn btn-danger">移除最愛</button></form>
+                    {{else}}
+                    <form class="d-inline-block" action="/favorite/{{this.id}}" method="POST"><button type="submit"
+                            class="btn btn-primary">加到最愛</button></form>
+                    {{/if}}
                 </div>
 
             </div>
         </div>
+        {{/each}}
     </div>
     <div class="col-2"></div>
 </div>
