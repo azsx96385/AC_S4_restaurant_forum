@@ -9,12 +9,45 @@
     </div>
 </div>
 <div class="row mt-3">
-    <div class="col">
-        <div class="card">
-            <h5 class="card-header">已評論餐廳</h5>
+    <div class="col-6">
+        <div class="card m-3">
+            <h5 class="card-header">{{FollowingsCount}}Followings|追蹤者</h5>
             <div class="card-body">
-                {{#each restaurants}}
-                <a href="/restaurants/{{this.id}}"> <img src="{{this.image}}" alt="餐廳圖片{{this.id}}"
+                {{#each Followings}}
+                <a href="/users/{{this.id}}"> <img src="{{this.image}}" alt="追蹤者圖片{{this.id}}"
+                        style="height:60px;weight:60px;"> </a>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card m-3">
+            <h5 class="card-header">{{commenedRestaurantsCount}}已評論餐廳</h5>
+            <div class="card-body">
+                {{#each commenedRestaurants}}
+                <a href="/restaurants/{{this.id}}"> <img src="{{this.image}}" alt="已評論餐廳{{this.id}}"
+                        style="height:60px;weight:60px;"> </a>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card m-3">
+            <h5 class="card-header">{{FollowersCount}}Followers|追隨者</h5>
+            <div class="card-body">
+                {{#each Followers}}
+                <a href="/users/{{this.id}}"> <img src="{{this.image}}" alt="追隨者圖片{{this.id}}"
+                        style="height:60px;weight:60px;"> </a>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card m-3">
+            <h5 class="card-header">{{FavoritedRestaurantsCount}}已收藏餐廳</h5>
+            <div class="card-body">
+                {{#each FavoritedRestaurants}}
+                <a href="/restaurants/{{this.id}}"> <img src="{{this.image}}" alt="收藏餐廳圖片{{this.id}}"
                         style="height:60px;weight:60px;"> </a>
                 {{/each}}
             </div>

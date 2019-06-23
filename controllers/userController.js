@@ -59,23 +59,40 @@ const userController = {
   },
   getUser: (req, res) => {
     let userId = req.params.id;
-    User.findByPk(userId, { include: Comment }).then(user => {
+    //目標：取得 user model(追蹤者｜追隨者) ｜ restaurant(最愛餐廳 | 評論餐廳 )
+    User.findByPk(userId, {
+      include: [Comment,
+        { model: User, as: 'Followings' }, //使用者追蹤的人
+        { model: User, as: 'Followers' }, //擁有的追隨者
+        { model: Restaurant, as: 'FavoritedRestaurants' },//最愛餐廳
+      ]
+    }).then(user => {
+      //追蹤者 user.Followings |追蹤者陣列|id / image
+      let Followings = [...user.Followings]
+      //追隨者 user.Followers｜追隨者陣列｜
+      let Followers = [...user.Followers]
+      //最愛餐廳  user.FavoritedRestaurants
+      let FavoritedRestaurants = [...user.FavoritedRestaurants]
+      //用戶評論餐廳｜不重複
       let resIdListAll = [];
-      let restaurants = [];
+      let commenedRestaurants = [];
       user.Comments.forEach(comment => {
         resIdListAll.push(comment.RestaurantId);
       });
-      let resIdListNoreapt = resIdListAll.filter(function(element, index, arr) {
+      let resIdListNoreapt = resIdListAll.filter(function (element, index, arr) {
         return arr.indexOf(element) === index;
       });
       resIdListNoreapt.forEach(resId => {
         Restaurant.findByPk(resId).then(resdata => {
-          console.log("-------------------", resdata);
-          restaurants.push(resdata);
+          commenedRestaurants.push(resdata);
+          //-----
+          //回傳值
+          res.render("userprofile", { user, Followings, FollowingsCount: Followings.length, Followers, FollowersCount: Followers.length, FavoritedRestaurants, FavoritedRestaurantsCount: FavoritedRestaurants.length, commenedRestaurants, commenedRestaurantsCount: commenedRestaurants.length });
+
+
         });
       });
 
-      res.render("userprofile", { user, restaurants });
     });
   },
   editUser: (req, res) => {
