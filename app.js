@@ -52,4 +52,4 @@ app.use((req, res, next) => {
   res.locals.user = req.user;
   next();
 });
-require("./routes/index")(app, passport);
+require("./routes/index")(app);
