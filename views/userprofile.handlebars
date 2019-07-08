@@ -22,7 +22,7 @@
     </div>
     <div class="col-6">
         <div class="card m-3">
-            <h5 class="card-header">{{commenedRestaurantsCount}}已評論餐廳</h5>
+            <h5 class="card-header">{{commenedRestaurants.length}} 已評論餐廳</h5>
             <div class="card-body">
                 {{#each commenedRestaurants}}
                 <a href="/restaurants/{{this.id}}"> <img src="{{this.image}}" alt="已評論餐廳{{this.id}}"
